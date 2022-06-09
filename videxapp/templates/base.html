@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/media/css/home.css">
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/semantic-ui/2.4.1/semantic.rtl.min.css"
+          integrity="sha384-yXUIpeQfH3cuk6u6Mwu8uyJXB2R3UOLvcha1343UCMA2TA7lQ14BFmrudI6LAP8A"
+          crossorigin="anonymous">
+
+    <script src="https://cdn.rtlcss.com/semantic-ui/2.4.1/semantic.min.js"
+            integrity="sha384-6urqf2sgCGDfIXcoxTUOVIoQV+jFr/Zuc4O2wCRS6Rnd8w0OJ17C4Oo3PuXu8ZtF"
+            crossorigin="anonymous"></script>
+    <title>{% block title %}{% endblock %} | سامانه آنلاین یادگیری و یاددهی ویدکس</title>
+</head>
+<body dir="rtl">
+<div class="ui secondary menu" id="navbar">
+    {% block tabs %}
+    {% endblock %}
+</div>
+<div class="ui three column grid">
+    <div class="row">
+        <div class="ui column"></div>
+        <div class="ui five column">
+            <div class="ui middle aligned aligned grid">
+                <div class="column">
+                    <div class="ui stacked segment">
+
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui column"></div>
+</div>
+</body>
+</html>

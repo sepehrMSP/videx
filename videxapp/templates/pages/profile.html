@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block tabs %}
+    {% include 'includes/tabs.html' with active_tab='profile' %}
+{% endblock %}
+
+{% block title %}
+    نمایه
+{% endblock %}
+
+{% block content %}
+    <h1>نمایه</h1>
+    <div class="ui breadcrumb">
+        <a class="section" href="{% url 'home' %}">خانه</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">نمایه</div>
+    </div><br/>
+
+
+    <div class="ui card">
+        <div class="ui slide masked reveal image">
+            {% if request.user.avatar %}
+                <img id="profile_image" src="{{ request.user.avatar.url }}" class="ui medium circular image"
+                     alt="profile_image"/>
+            {% endif %}
+        </div>
+        <div class="content">
+            <a class="header">
+                <span id="text_user_name">{{ request.user.username }}</span>
+            </a>
+            <div class="meta">
+                <span id="text_first_name">{{ request.user.first_name }}</span>
+                <span id="text_last_name">{{ request.user.last_name }}</span>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

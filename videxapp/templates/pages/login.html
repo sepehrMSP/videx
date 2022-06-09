@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block tabs %}
+    {% include 'includes/tabs.html' with active_tab='login' %}
+{% endblock %}
+
+{% block title %}
+    صفحهٔ ورود
+{% endblock %}
+
+{% block content %}
+    <div id="form">
+        <form id="login_form" class="ui small form" method="post">
+            <h1>ورود</h1>
+
+            <div class="ui breadcrumb">
+                <a class="section" href="{% url 'home' %}">خانه</a>
+                <i class="right angle icon divider"></i>
+                <div class="active section">ورود</div>
+            </div>
+
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="ui fluid large teal submit button">ورود</button>
+
+        </form>
+
+        <div class="ui message">
+            هنوز حساب کاربری ندارید؟ <a href="{% url 'register' %}">ثبت نام</a>
+        </div>
+
+        {% for error in form.non_field_errors %}
+            <div id="errors" class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    خطا
+                </div>
+                <p>{{ error|escape }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
