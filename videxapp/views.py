@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import get_user_model, authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-from videxapp.forms import RegisterForm, RemoveErrorsFromForm, UserFormLogin
+from videxapp.forms import MakeCourseForm, RegisterForm, RemoveErrorsFromForm, UserFormLogin
+from videxapp.models import Course
 
 
 User = get_user_model()
@@ -51,3 +52,20 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     return render(request, "pages/profile.html")
+
+
+@user_passes_test(lambda u: u.is_superuser)
+@login_required
+def make_new_course_view(request):
+    if request.method == 'POST':
+        form = MakeCourseForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            instructor = request.user
+            Course(instructor=instructor, name=name).save()
+            return redirect("/")
+    else:
+        form = MakeCourseForm()
+    return render(request, 'pages/make_new_course.html', {
+        'form': form
+    })

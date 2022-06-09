@@ -4,7 +4,7 @@ from django.forms.utils import ErrorList
 from django.contrib.auth.forms import UserCreationForm
 
 
-from videxapp.models import VidexUser
+from videxapp.models import Course, VidexUser
 
 User = get_user_model()
 
@@ -56,3 +56,15 @@ class RegisterForm(UserCreationForm):
 
         if password != confirm_password:
             raise forms.ValidationError("گذرواژه و تکرار گذرواژه یکسان نیستند")
+
+
+
+class MakeCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MakeCourseForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Course
+        fields = (
+            'name',
+        )

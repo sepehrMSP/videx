@@ -1,8 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+class Course(models.Model):
+    name = models.CharField(max_length=64, verbose_name="course name")
+    instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="کد ملی")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')
     balance = models.IntegerField(verbose_name='balance', default=0)
+    registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
+    finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
