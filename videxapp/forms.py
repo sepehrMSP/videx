@@ -36,6 +36,7 @@ class RegisterForm(UserCreationForm):
             'username',
             'email',
             'national_id',
+            'telephone_number',
             'first_name',
             'last_name',
         )
