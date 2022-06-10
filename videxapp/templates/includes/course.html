@@ -1,0 +1,32 @@
+<div class="{{ course.course_id}} ui message">
+    <h4>
+        {{ course.name }}
+    </h4>
+
+    <div class="ui label" style="margin: 3px;">
+        <i class="user icon"></i>
+        {{ course.instructor }}
+    </div>
+    <div class="ui label" style="margin: 3px;">
+        <i class="users icon"></i>
+        {{ course.number_of_registered_students }}
+    </div>
+
+    <br/>
+    <hr/>
+    {% if course not in my_courses.all %}
+        <a class="add ui mini green button" href="{% url 'register_course' course.course_id %}">
+            <i class="add icon"></i>
+            register in course
+        </a>
+    {% else %}
+        <a class="remove ui mini red button" href="{% url 'remove_course' course.course_id %}">
+            <i class="trash icon"></i>
+            remove the course
+        </a>
+    {% endif %}
+    <a class="details ui mini brown button" href="{% url 'course_page' course.course_id %}">
+        <i class="file alternate icon"></i>
+        course page
+    </a>
+</div>

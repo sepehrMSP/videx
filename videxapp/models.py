@@ -8,6 +8,15 @@ class Course(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    @property
+    def course_id(self):
+        return self.id
+
+    @property
+    def number_of_registered_students(self):
+        return VidexUser.objects.filter(registered_courses__id=self.course_id).count()
+
+
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="کد ملی")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ course.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ course.name }}</h1>
+    <div class="ui breadcrumb">
+        <a class="section" href="{% url 'home' %}">home</a>
+        <i class="right angle icon divider"></i>
+        <a class="section" href="{% url 'courses' %}">courses</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">{{ course.name }}</div>
+    </div>
+
+
+    <div class="details ui segment">
+        <p class="ui large label" style="margin: 5px;">
+            <i class="building icon"></i>
+            {{ course.instructor }}
+        </p>
+        <p id="students_count" class="ui large label" style="margin: 5px;">
+            <i class="users icon"></i>
+            {{ course.number_of_registered_students }}
+        </p>
+        <p class="ui large label" style="margin: 5px;">
+            <i class="users icon"></i>
+            {{ course.name }}
+        </p>
+    </div>
+{% endblock %}

@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from videxapp.views import login_view, logout_view, make_new_course_view, profile_view, register_view
+from videxapp.views import course_page_view, courses_search_view, logout_view, make_new_course_view, profile_view, register_course_view, register_view, remove_course_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,7 +31,12 @@ urlpatterns = [
     path('register', register_view, name='register'),
     path('logout', logout_view, name='logout'),
     path('profile', profile_view, name='profile'),
+
+    path('course/all', courses_search_view, name='courses'),
+    path('course/<int:course_id>', course_page_view, name='course_page'),
     path('course/add', make_new_course_view, name='make_new_course'),
+    path('course/remove/<int:course_id>', remove_course_view, name='remove_course'),
+    path('course/register/<int:course_id>', register_course_view, name='register_course'),
 
 ]
 

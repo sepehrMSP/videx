@@ -1,11 +1,11 @@
+from unicodedata import name
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from videxapp.forms import MakeCourseForm, RegisterForm, RemoveErrorsFromForm, UserFormLogin
-from videxapp.models import Course
-
+from videxapp.models import Course, VidexUser
 
 User = get_user_model()
 
@@ -31,7 +31,6 @@ def login_view(request):
         else:
             return HttpResponse(form.errors)
 
-
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST, error_class=RemoveErrorsFromForm)
@@ -53,8 +52,6 @@ def logout_view(request):
 def profile_view(request):
     return render(request, "pages/profile.html")
 
-
-@user_passes_test(lambda u: u.is_superuser)
 @login_required
 def make_new_course_view(request):
     if request.method == 'POST':
@@ -69,3 +66,38 @@ def make_new_course_view(request):
     return render(request, 'pages/make_new_course.html', {
         'form': form
     })
+
+@login_required
+def register_course_view(request, course_id: int):
+    course = Course.objects.get(id=course_id)
+    user: VidexUser = request.user
+    user.registered_courses.add(course)
+    user.save()
+    return redirect('courses')
+
+@login_required
+def course_page_view(request, course_id: int):
+    course: Course = Course.objects.get(id=course_id)
+    print('***********')
+    print(course.number_of_registered_students)
+    print('***********')
+    return render(request, 'pages/course_page.html', {
+        'course': course,
+    })
+
+@login_required
+def courses_search_view(request):
+    all_courses = Course.objects.all()
+    my_courses = request.user.registered_courses
+    return render(request, 'pages/courses.html', {
+        'all_courses': all_courses,
+        'my_courses': my_courses,
+    })
+
+@login_required
+def remove_course_view(request, course_id):
+    course = Course.objects.get(id=course_id)
+    user: VidexUser = request.user
+    user.registered_courses.remove(course)
+    user.save()
+    return redirect('courses')
