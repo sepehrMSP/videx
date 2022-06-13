@@ -24,7 +24,7 @@
     <div id="all_courses">
         <h3>all courses</h3>
         {% for course in all_courses.all %}
-            {% if course not in my_courses.all %}
+            {% if course not in my_courses.all and course not in registered_courses.all %}
                 {% include 'includes/course.html' with course=course %}
             {% endif %}
         {% endfor %}
@@ -32,8 +32,15 @@
     <br/>
     <div id="my_courses">
         <h3>my courses</h3>
-        {% for my_course in my_courses.all %}
-            {% include 'includes/course.html' with course=my_course %}
+        {% for course in my_courses.all %}
+            {% include 'includes/course.html' with course=course %}
+        {% endfor %}
+    </div>
+    <br/>
+    <div id="registered_courses">
+        <h3>registered courses</h3>
+        {% for course in registered_courses.all %}
+            {% include 'includes/course.html' with course=course %}
         {% endfor %}
     </div>
 {% endblock %}

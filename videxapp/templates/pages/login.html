@@ -5,28 +5,28 @@
 {% endblock %}
 
 {% block title %}
-    صفحهٔ ورود
+    Login Page
 {% endblock %}
 
 {% block content %}
     <div id="form">
         <form id="login_form" class="ui small form" method="post">
-            <h1>ورود</h1>
+            <h1>Login</h1>
 
             <div class="ui breadcrumb">
-                <a class="section" href="{% url 'home' %}">خانه</a>
+                <a class="section" href="{% url 'home' %}">Home</a>
                 <i class="right angle icon divider"></i>
-                <div class="active section">ورود</div>
+                <div class="active section">Login</div>
             </div>
 
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="ui fluid large teal submit button">ورود</button>
+            <button type="submit" class="ui fluid large teal submit button">Login</button>
 
         </form>
 
         <div class="ui message">
-            هنوز حساب کاربری ندارید؟ <a href="{% url 'register' %}">ثبت نام</a>
+            No account yet? <a href="{% url 'register' %}">Register</a>
         </div>
 
         {% for error in form.non_field_errors %}

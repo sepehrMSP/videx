@@ -16,6 +16,13 @@ class Course(models.Model):
     def number_of_registered_students(self):
         return VidexUser.objects.filter(registered_courses__id=self.course_id).count()
 
+class Session(models.Model):
+    name = models.CharField(max_length=64, verbose_name="session name")
+    text = models.TextField(verbose_name="session content")
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
 
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="کد ملی")

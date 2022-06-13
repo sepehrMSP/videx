@@ -1,32 +1,43 @@
-{% extends 'base.html' %}
+{% extends 'bare_base.html' %}
 
 {% block title %}
     {{ course.name }}
 {% endblock %}
 
 {% block content %}
+<div class="ui breadcrumb">
+    <a class="section" href="{% url 'home' %}">home</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <a class="section" href="{% url 'courses' %}">courses</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <div class="active section">{{ course.name }}</div>
+</div>
+<div class="row">
+<div class="col-md-9">
     <h1>{{ course.name }}</h1>
-    <div class="ui breadcrumb">
-        <a class="section" href="{% url 'home' %}">home</a>
-        <i class="right angle icon divider"></i>
-        <a class="section" href="{% url 'courses' %}">courses</a>
-        <i class="right angle icon divider"></i>
-        <div class="active section">{{ course.name }}</div>
-    </div>
-
-
-    <div class="details ui segment">
-        <p class="ui large label" style="margin: 5px;">
-            <i class="building icon"></i>
-            {{ course.instructor }}
-        </p>
-        <p id="students_count" class="ui large label" style="margin: 5px;">
-            <i class="users icon"></i>
-            {{ course.number_of_registered_students }}
-        </p>
-        <p class="ui large label" style="margin: 5px;">
-            <i class="users icon"></i>
-            {{ course.name }}
-        </p>
-    </div>
+    {% for lec in lectures %}
+        <h2>{{ lec.name }}</h2>
+        <p>{{ lec.text }}</p>
+    {% endfor %}
+    {% if rule == "instructor" %}
+    <a href="./session/add" class="btn btn-primary">Add session</a>
+    {% endif %}
+    {% if rule == "anonymous" %}
+    <a href="./register" class="btn btn-primary">Register in course</a>
+    {% endif %}
+    {% if rule == "student" %}
+    <a href="./remove" class="btn btn-primary">Drop the course</a>
+    {% endif %}
+</div>
+<div class="col-md-3">
+    <h3>Instructor</h3>
+    <ul><li>{{ course.instructor }}</li></ul>
+    <h3>Students</h3>
+    <ul>
+        {% for student in students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+</div>
+</div>
 {% endblock %}

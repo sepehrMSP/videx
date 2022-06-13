@@ -14,7 +14,7 @@
 
     <br/>
     <hr/>
-    {% if course not in my_courses.all %}
+    {% if course not in registered_courses.all %}
         <a class="add ui mini green button" href="{% url 'register_course' course.course_id %}">
             <i class="add icon"></i>
             register in course
@@ -22,7 +22,7 @@
     {% else %}
         <a class="remove ui mini red button" href="{% url 'remove_course' course.course_id %}">
             <i class="trash icon"></i>
-            remove the course
+            drop the course
         </a>
     {% endif %}
     <a class="details ui mini brown button" href="{% url 'course_page' course.course_id %}">
