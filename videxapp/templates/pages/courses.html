@@ -5,24 +5,24 @@
 {% endblock %}
 
 {% block title %}
-    courses
+    Courses
 {% endblock %}
 
 {% block content %}
     {% csrf_token %}
     <div>
-        <h1>all courses</h1>
+        <h1>All Courses</h1>
         <div class="ui breadcrumb">
-            <a class="section" href="{% url 'home' %}">home</a>
+            <a class="section" href="{% url 'home' %}">Home</a>
             <i class="right angle icon divider"></i>
             <div class="active section">
-                all courses
+                All Courses
             </div>
         </div>
     </div>
 
     <div id="all_courses">
-        <h3>all courses</h3>
+        <h3>All Courses</h3>
         {% for course in all_courses.all %}
             {% if course not in my_courses.all and course not in registered_courses.all %}
                 {% include 'includes/course.html' with course=course %}
@@ -31,14 +31,14 @@
     </div>
     <br/>
     <div id="my_courses">
-        <h3>my courses</h3>
+        <h3>My Courses</h3>
         {% for course in my_courses.all %}
             {% include 'includes/course.html' with course=course %}
         {% endfor %}
     </div>
     <br/>
     <div id="registered_courses">
-        <h3>registered courses</h3>
+        <h3>Registered Courses</h3>
         {% for course in registered_courses.all %}
             {% include 'includes/course.html' with course=course %}
         {% endfor %}
