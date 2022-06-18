@@ -1,26 +1,26 @@
-<a id="homepage" class="ui item{% if active_tab == '/' %} active{% endif %}" href="/">home</a>
+<a id="homepage" class="ui item{% if active_tab == '' %} active{% endif %}" href="/">Home</a>
 
 {% if not request.user.is_authenticated %}
-    <a href="{% url 'login' %}" id="login" class="ui item{% if active_tab == 'login' %} active{% endif %}">login</a>
-    <a href="{% url 'register' %}" id="register" class="ui item{% if active_tab == 'register' %} active{% endif %}">register</a>
+    <a href="{% url 'login' %}" id="login" class="ui item{% if active_tab == 'login' %} active{% endif %}">Login</a>
+    <a href="{% url 'register' %}" id="register" class="ui item{% if active_tab == 'register' %} active{% endif %}">Register</a>
 {% else %}
     <a  href="{% url 'profile' %}"
         id="profile"
         class="ui item{% if active_tab == 'profile' %} active{% endif %}">
-        profile
+        Profile
     </a>
 {% endif %}
 
 <a href="{% url 'courses' %}" id="courses" style="margin-top: 5px;"
-       class="ui fluid large green button">
+       class="ui large green button">
         <i class="book icon"></i>
-        all courses
+        All Courses
 </a>
 
 {% if request.user.is_authenticated %}
     <div class="right menu">
         <a id="logout" class="ui item" href="{% url 'logout' %}">
-            logout
+            Logout
         </a>
     </div>
 {% endif %}
