@@ -24,6 +24,16 @@ class Session(models.Model):
     def __str__(self) -> str:
         return self.name
 
+class Exam(models.Model):
+    name = models.CharField(max_length=64, verbose_name="exam name")
+    release_date = models.DateTimeField()
+    deadline_date = models.DateTimeField()
+    min_grade = models.IntegerField()
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="ID Number")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')

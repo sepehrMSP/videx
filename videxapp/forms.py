@@ -4,7 +4,7 @@ from django.forms.utils import ErrorList
 from django.contrib.auth.forms import UserCreationForm
 
 
-from videxapp.models import Course, VidexUser, Session
+from videxapp.models import *
 
 User = get_user_model()
 
@@ -67,6 +67,19 @@ class MakeCourseForm(forms.ModelForm):
         model = Course
         fields = (
             'name',
+        )
+
+class MakeExamForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MakeExamForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Exam
+        fields = (
+            'name',
+            'release_date',
+            'deadline_date',
+            'min_grade',
         )
 
 class MakeSessionForm(forms.ModelForm):

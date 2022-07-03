@@ -15,12 +15,23 @@
 <div class="row">
 <div class="col-md-9">
     <h1>{{ course.name }}</h1>
+    <h2>Lectures</h2>
     {% for lec in lectures %}
-        <h2>{{ lec.name }}</h2>
+        <h3>{{ lec.name }}</h3>
         <p>{{ lec.text }}</p>
+    {% endfor %}
+    <h2>Exams / Tasks</h2>
+    {% for ex in exams %}
+        <h3>{{ ex.name }}</h3>
+        <p>
+            Release date: {{ ex.release_date }}
+            Deadline: {{ ex.deadline_date }}
+            <a href="./exam/{{ex.id}}" class="btn btn-primary">View</a>
+        </p>
     {% endfor %}
     {% if rule == "instructor" %}
     <a href="./session/add" class="btn btn-primary">Add session</a>
+    <a href="./exam/add" class="btn btn-primary">Add exam / task</a>
     {% endif %}
     {% if rule == "anonymous" %}
     <a href="./register" class="btn btn-primary">Register in course</a>

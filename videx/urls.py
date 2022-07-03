@@ -33,6 +33,8 @@ urlpatterns = [
     path('profile', profile_view, name='profile'),
 
     path('course/all', courses_search_view, name='courses'),
+    path('course/<int:course_id>/exam/add', make_new_exam_view, name='make_new_exam'),
+    path('course/<int:course_id>/exam/<int:exam_id>', exam_page_view, name='exam_page'),
     path('course/<int:course_id>/session/add', make_new_session_view, name='make_new_session'),
     path('course/<int:course_id>/remove', remove_course_view, name='remove_course'),
     path('course/<int:course_id>/register', register_course_view, name='register_course'),
