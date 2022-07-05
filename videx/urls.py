@@ -38,6 +38,9 @@ urlpatterns = [
     path('course/<int:course_id>/register', register_course_view, name='register_course'),
     path('course/<int:course_id>/', course_page_view, name='course_page'),
     path('course/add', make_new_course_view, name='make_new_course'),
+    path('course/<int:course_id>/session/<int:session_id>/', session_page_view, name='session_page'),
+    path('add_comment/<int:course_id>/<int:session_id>', add_comment_view, name='add_comment'),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

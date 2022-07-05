@@ -28,5 +28,13 @@ class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="ID Number")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')
     balance = models.IntegerField(verbose_name='balance', default=0)
-    registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
-    finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
+    registered_courses = models.ManyToManyField(Course, related_name='registered_courses', blank=True)
+    finished_courses = models.ManyToManyField(Course, related_name='finished_courses', blank=True)
+
+class Chatroom(models.Model):
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+
+class Comment(models.Model):
+    user = models.ForeignKey(VidexUser, on_delete=models.CASCADE)
+    chatroom = models.ForeignKey(Chatroom, on_delete=models.CASCADE, blank=True, null=True)
+    text = models.TextField(null=True)
