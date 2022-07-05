@@ -39,7 +39,8 @@ class RegisterForm(UserCreationForm):
             'telephone_number',
             'first_name',
             'last_name',
-            'user_img'
+            'user_img',
+            'resume'
         )
 
     def clean_username(self):
@@ -58,6 +59,12 @@ class RegisterForm(UserCreationForm):
         if password != confirm_password:
             raise forms.ValidationError("گذرواژه و تکرار گذرواژه یکسان نیستند")
 
+    def clean_resume(self):
+        resume = self.cleaned_data['resume']
+        print(resume.content_type)
+        if resume.content_type != 'application/pdf':
+            raise forms.ValidationError("CV must be PDF")
+        return resume
 
 
 class MakeCourseForm(forms.ModelForm):

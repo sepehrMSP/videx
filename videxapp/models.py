@@ -31,3 +31,4 @@ class VidexUser(AbstractUser):
     registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
     finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
     user_img = models.ImageField(default='blank-profile.png', blank=True, upload_to='images/', verbose_name='Profile picture')
+    resume = models.FileField(null=True, blank=True, upload_to='resume', verbose_name='CV')

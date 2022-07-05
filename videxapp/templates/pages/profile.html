@@ -20,7 +20,6 @@
     <div class="ui card">
         <div class="ui slide masked reveal image">
             {% if request.user.user_img %}
-            <p> hello </p>
                 <img id="profile_image" src="{{ request.user.user_img.url }}" class="ui medium circular image"
                      alt="profile_image"/>
             {% endif %}
@@ -34,6 +33,12 @@
                 <span id="text_last_name">{{ request.user.last_name }}</span>
             </div>
         </div>
+        {% if request.user.resume %}
+            <a class="add ui mini green button" href="{{ request.user.resume.url }}">
+                <i class="download icon"></i>
+                Get CV
+            </a>
+        {% endif %}
     </div>
 
 
