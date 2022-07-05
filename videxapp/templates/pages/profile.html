@@ -19,8 +19,9 @@
 
     <div class="ui card">
         <div class="ui slide masked reveal image">
-            {% if request.user.avatar %}
-                <img id="profile_image" src="{{ request.user.avatar.url }}" class="ui medium circular image"
+            {% if request.user.user_img %}
+            <p> hello </p>
+                <img id="profile_image" src="{{ request.user.user_img.url }}" class="ui medium circular image"
                      alt="profile_image"/>
             {% endif %}
         </div>

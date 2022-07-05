@@ -30,3 +30,4 @@ class VidexUser(AbstractUser):
     balance = models.IntegerField(verbose_name='balance', default=0)
     registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
     finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
+    user_img = models.ImageField(default='blank-profile.png', blank=True, upload_to='images/', verbose_name='Profile picture')

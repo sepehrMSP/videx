@@ -34,7 +34,7 @@ def login_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST, error_class=RemoveErrorsFromForm)
+        form = RegisterForm(request.POST, request.FILES, error_class=RemoveErrorsFromForm)
         if form.is_valid():
             form.save()
             return redirect("home")
