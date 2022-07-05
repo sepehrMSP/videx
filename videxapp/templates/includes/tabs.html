@@ -18,6 +18,8 @@
 </a>
 
 {% if request.user.is_authenticated %}
+    <a href="{% url 'make_new_course' %}" id="create course" class="ui item{% if active_tab == 'make_new_course' %} active{% endif %}">Create a course</a>
+
     <div class="right menu">
         <a id="logout" class="ui item" href="{% url 'logout' %}">
             Logout
