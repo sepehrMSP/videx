@@ -39,6 +39,7 @@ class RegisterForm(UserCreationForm):
             'telephone_number',
             'first_name',
             'last_name',
+            'user_img'
         )
 
     def clean_username(self):
