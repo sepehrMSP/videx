@@ -35,6 +35,11 @@ urlpatterns = [
     path('course/all', courses_search_view, name='courses'),
     path('course/<int:course_id>/exam/add', make_new_exam_view, name='make_new_exam'),
     path('course/<int:course_id>/exam/<int:exam_id>', exam_page_view, name='exam_page'),
+    path('course/<int:course_id>/exam/<int:exam_id>/question/add', choose_question_type_view, name='choose_question'),
+    path('course/<int:course_id>/exam/<int:exam_id>/question/add/multiple-choice', add_multiple_choice_question_view, name='add_multiple_choice_question'),
+    path('course/<int:course_id>/exam/<int:exam_id>/question/add/single-answer', add_single_answer_question_view, name='add_single_answer_question'),
+    path('course/<int:course_id>/exam/<int:exam_id>/question/add/written', add_written_question_view, name='add_question'),
+
     path('course/<int:course_id>/session/add', make_new_session_view, name='make_new_session'),
     path('course/<int:course_id>/remove', remove_course_view, name='remove_course'),
     path('course/<int:course_id>/register', register_course_view, name='register_course'),

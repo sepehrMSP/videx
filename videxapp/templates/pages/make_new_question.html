@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create A Question
+{% endblock %}
+
+{% block content %}
+    <script>
+        function remove_form_fields(form) {
+            var elements = form.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                if (elements[i].name.indexOf('csrf') === -1) {
+                    elements[i].value = '';
+                }
+            }
+        }
+
+        function selectQuestion(src) {
+            const questionTypes = document.querySelectorAll('input[name="fav_language"]');
+            let value;
+            var multiple_answer_form = document.getElementById("make-multiple-question");
+            var single_answer_form = document.getElementById("make-single-answer-question");
+            var written_question_form = document.getElementById("make-written-question");
+            multiple_answer_form.style.display = 'none'
+            single_answer_form.style.display = 'none'
+            written_question_form.style.display = 'none'
+            remove_form_fields(multiple_answer_form)
+            remove_form_fields(single_answer_form)
+            remove_form_fields(written_question_form)
+
+            if (src.value == 'multiple-answer-qeustion') {
+                multiple_answer_form.style.display = 'block'
+            }
+            else if (src.value == 'single-answer-question') {
+                single_answer_form.style.display = 'block'
+            }
+            else if (src.value == 'written-question') {
+                written_question_form.style.display = 'block'
+            }
+        }
+    </script>
+
+    <p>Choose your question type:</p>
+
+    <form>
+        <input type="radio" id="multiple-answer-qeustion" name="fav_language" value="multiple-answer-qeustion" onchange="selectQuestion(this)">
+        <label for="multiple-answer-qeustion">multiple answer question</label><br>
+        <input type="radio" id="single-answer-question" name="fav_language" value="single-answer-question" onchange="selectQuestion(this)">
+        <label for="single-answer-question">single answer question</label><br>
+        <input type="radio" id="written-question" name="fav_language" value="written-question" onchange="selectQuestion(this)">
+        <label for="written-question">written answer question</label>
+    </form>
+
+    <div id="form">
+        <form id="make-multiple-question" class="ui small form" method="post" style="display: none">
+            <h1>Create a question</h1>
+            {% csrf_token %}
+            {{ multiple_answer_question_form.as_p }}
+            <input type="hidden" name="formtype">
+            <button type="submit" class="ui fluid large teal submit button">Create</button>
+            <div class="ui error message"></div>
+        </form>
+        <form id="make-single-answer-question" class="ui small form" method="post" style="display: none">
+            <h1>Create a question</h1>
+            {% csrf_token %}
+            {{ single_answer_question_form.as_p }}
+            <input type="hidden" name="formtype">
+            <button type="submit" class="ui fluid large teal submit button">Create</button>
+            <div class="ui error message"></div>
+        </form>
+        <form id="make-written-question" class="ui small form" method="post" style="display: none">
+            <h1>Create a question</h1>
+            {% csrf_token %}
+            {{ written_answer_question_form.as_p }}
+            <input type="hidden" name="formtype">
+            <button type="submit" class="ui fluid large teal submit button">Create</button>
+            <div class="ui error message"></div>
+        </form>
+
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Error
+                </div>
+                <p>{{ error|escape }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -69,6 +69,7 @@ class MakeCourseForm(forms.ModelForm):
             'name',
         )
 
+
 class MakeExamForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MakeExamForm, self).__init__(*args, **kwargs)
@@ -81,6 +82,10 @@ class MakeExamForm(forms.ModelForm):
             'deadline_date',
             'min_grade',
         )
+        widgets = {
+            'release_date': forms.DateInput(attrs={'type': 'date'}),
+            'deadline_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class MakeSessionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -91,4 +96,53 @@ class MakeSessionForm(forms.ModelForm):
         fields = (
             'name',
             'text',
+        )
+
+class MakeMultipleChoiceQuestionForm(forms.ModelForm):
+    def __int__(self, *args, **kwargs):
+        super(MakeMultipleChoiceQuestionForm, self).__init__(*args, **kwargs)
+
+    CHOICES = (
+        ("1", "first choice"),
+        ("2", "second choice"),
+        ("3", "third choice"),
+        ("4", "forth choice"),
+    )
+
+    answer_id = forms.ChoiceField(choices=CHOICES)
+    class Meta:
+        model = MultipleChoiceQuestion
+        fields = (
+            'question_text',
+            'choice1',
+            'choice2',
+            'choice3',
+            'choice4',
+        )
+
+class MakeWrittenQuestionForm(forms.ModelForm):
+    def __int__(self, *args, **kwargs):
+        super(MakeWrittenQuestionForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = WrittenQuestion
+        fields = (
+            'question_text',
+        )
+    def clean(self):
+        super(MakeWrittenQuestionForm, self).clean()
+        question_text = self.cleaned_data.get('question_text')
+        print(f'THIS IS THE QUESITON: {question_text}')
+        if question_text is None:
+            raise forms.ValidationError('the question is not specified')
+
+class MakeSingleAnswerQuestionForm(forms.ModelForm):
+    def __int__(self, *args, **kwargs):
+        super(MakeSingleAnswerQuestionForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = SingleAnswerQuestion
+        fields = (
+            'question_text',
+            'answer',
         )

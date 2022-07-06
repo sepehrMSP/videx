@@ -1,0 +1,31 @@
+{% extends 'bare_base.html' %}
+
+{% block title %}
+    {{ exam.name }}
+{% endblock %}
+
+{% block content %}
+<div class="ui breadcrumb">
+    <a class="section" href="{% url 'home' %}">home</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <a class="section" href="{% url 'courses' %}">courses</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <a class="section" href="../">{{ exam.course.name }}</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <div class="active section">{{ exam.name }}</div>
+</div>
+<div class="row">
+<div class="col-md-9">
+    <h1>{{ exam.name }}</h1>
+    <h2>Choose your question type: </h2>
+    <a href="./add/multiple-choice " class="btn btn-primary">multiple answer qeustion</a><br>
+    <br>
+    <a href="./add/single-answer " class="btn btn-primary">single answer question</a><br>
+    <br>
+    <a href="./add/written " class="btn btn-primary">written question</a><br>
+    <br>
+</div>
+<div class="col-md-3">
+</div>
+</div>
+{% endblock %}

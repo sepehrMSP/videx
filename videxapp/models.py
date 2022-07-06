@@ -40,3 +40,29 @@ class VidexUser(AbstractUser):
     balance = models.IntegerField(verbose_name='balance', default=0)
     registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
     finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
+
+class Question(models.Model):
+    question_text = models.TextField()
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+class MultipleChoiceQuestion(Question):
+    choice1 = models.TextField()
+    choice2 = models.TextField()
+    choice3 = models.TextField()
+    choice4 = models.TextField()
+    CHOICES = (
+        (1, 'one'),
+        (2, 'two'),
+        (3, 'three'),
+        (4, 'four'),
+    )
+    answer_id = models.IntegerField(choices=CHOICES, default=1)
+
+class WrittenQuestion(Question):
+    pass
+
+class SingleAnswerQuestion(Question):
+    answer = models.CharField(max_length=100)
