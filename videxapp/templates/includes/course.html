@@ -11,6 +11,14 @@
         <i class="users icon"></i>
         {{ course.number_of_registered_students }}
     </div>
+    <div class="ui label" style="margin: 3px;">
+        <i class="dollar sign icon"></i>
+        {% if course.cost == 0 %}
+        Free
+        {% else %}
+        {{ course.cost }}
+        {% endif %}
+    </div>
 
     <br/>
     <hr/>

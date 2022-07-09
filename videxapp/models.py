@@ -4,7 +4,6 @@ from django.contrib.auth.models import AbstractUser
 
 class Course(models.Model):
     name = models.CharField(max_length=64, verbose_name="course name")
-    instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
     LEVELS = [
         ('BA', 'Basic'),
         ('IN', 'Intermediate'),
@@ -14,6 +13,7 @@ class Course(models.Model):
     cost = models.IntegerField(default=0, verbose_name='Course cost')
     creators = models.TextField(null=True, blank=True, verbose_name='Creators')
     ex_len = models.IntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
+    instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
