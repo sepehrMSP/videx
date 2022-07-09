@@ -8,6 +8,7 @@ from videxapp.models import Course, VidexUser, Session
 
 User = get_user_model()
 
+
 class RemoveErrorsFromForm(ErrorList):
     def __str__(self):
         return ''
@@ -87,7 +88,12 @@ class MakeCourseForm(forms.ModelForm):
         model = Course
         fields = (
             'name',
+            'level',
+            'cost',
+            'creators',
+            'ex_len'
         )
+
 
 class MakeSessionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

@@ -1,9 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class Course(models.Model):
     name = models.CharField(max_length=64, verbose_name="course name")
     instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
+    LEVELS = [
+        ('BA', 'Basic'),
+        ('IN', 'Intermediate'),
+        ('AD', 'Advanced')
+    ]
+    level = models.CharField(max_length=2, choices=LEVELS, default='IN')
+    cost = models.IntegerField(default=0, verbose_name='Course cost', help_text='Default is 0$')
+    creators = models.TextField(null=True, blank=True, verbose_name='Creators')
+    ex_len = models.IntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
 
     def __str__(self) -> str:
         return self.name
@@ -16,6 +26,7 @@ class Course(models.Model):
     def number_of_registered_students(self):
         return VidexUser.objects.filter(registered_courses__id=self.course_id).count()
 
+
 class Session(models.Model):
     name = models.CharField(max_length=64, verbose_name="session name")
     text = models.TextField(verbose_name="session content")
@@ -23,6 +34,7 @@ class Session(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
 
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="ID Number")
