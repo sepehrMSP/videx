@@ -91,7 +91,8 @@ class MakeCourseForm(forms.ModelForm):
             'level',
             'cost',
             'creators',
-            'ex_len'
+            'ex_len',
+            'description'
         )
 
 
