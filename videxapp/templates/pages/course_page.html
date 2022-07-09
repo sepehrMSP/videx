@@ -6,15 +6,19 @@
 
 {% block content %}
 <div class="ui breadcrumb">
-    <a class="section" href="{% url 'home' %}">home</a>
+    <a class="section" href="{% url 'home' %}">Home</a>
     <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
-    <a class="section" href="{% url 'courses' %}">courses</a>
+    <a class="section" href="{% url 'courses' %}">Courses</a>
     <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
     <div class="active section">{{ course.name }}</div>
 </div>
 <div class="row">
 <div class="col-md-9">
     <h1>{{ course.name }}</h1>
+    <h6>Course level: {{ course.level }}</h6>
+    <h6>Course cost: {{ course.cost }}$</h6>
+    <h6>Expected course length: {{ course.ex_len }} weeks</h6>
+    <h6>This course is brought to you by: {{ course.creators }}</h6>
     {% for lec in lectures %}
         <h2>{{ lec.name }}</h2>
         <p>{{ lec.text }}</p>
