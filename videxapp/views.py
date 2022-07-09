@@ -58,9 +58,10 @@ def make_new_course_view(request):
     if request.method == 'POST':
         form = MakeCourseForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
+            course = form.save(commit=False)
             instructor = request.user
-            Course(instructor=instructor, name=name).save()
+            course.instructor = instructor
+            course.save()
             return redirect("/")
     else:
         form = MakeCourseForm()
