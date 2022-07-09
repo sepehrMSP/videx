@@ -16,9 +16,20 @@
 <div class="col-md-9">
     <h1>{{ course.name }}</h1>
     <h6>Course level: {{ course.level }}</h6>
+    {% if course.cost != 0 $}
     <h6>Course cost: {{ course.cost }}$</h6>
+    {% else %}
+    <h6>Course cost: Free!</h6>
+    {% endif %}
+    {% if course.ex_len %}
     <h6>Expected course length: {{ course.ex_len }} weeks</h6>
+    {% endif %}
+    {% if course.creators %}
     <h6>This course is brought to you by: {{ course.creators }}</h6>
+    {% endif %}
+    {% if course.description %}
+    <h6>{{ course.description }}</h6>
+    {% endif %}
     {% for lec in lectures %}
         <h2>{{ lec.name }}</h2>
         <p>{{ lec.text }}</p>
