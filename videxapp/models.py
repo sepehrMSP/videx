@@ -27,8 +27,9 @@ class Session(models.Model):
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="ID Number")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')
-    balance = models.IntegerField(verbose_name='balance', default=0)
+    balance = models.IntegerField(verbose_name='Account balance', default=0)
     registered_courses = models.ManyToManyField(Course, related_name='registered_courses')
     finished_courses = models.ManyToManyField(Course, related_name='finished_courses')
     user_img = models.ImageField(default='blank-profile.png', blank=True, upload_to='images/', verbose_name='Profile picture')
     resume = models.FileField(null=True, blank=True, upload_to='resume', verbose_name='CV')
+    card_number = models.CharField(null=True, blank=True, max_length=16, verbose_name='Credit card number')

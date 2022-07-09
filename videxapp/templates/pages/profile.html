@@ -31,6 +31,12 @@
             <div class="meta">
                 <span id="text_first_name">{{ request.user.first_name }}</span>
                 <span id="text_last_name">{{ request.user.last_name }}</span>
+                <div class="ui divider"></div>
+                <span id="balance">Balance: {{ request.user.balance }}$</span>
+                {% if request.user.card_number %}
+                    <div class="ui divider"></div>
+                    <span id="card_number">Credit card number: {{ request.user.card_number }}</span>
+                {% endif %}
             </div>
         </div>
         {% if request.user.resume %}

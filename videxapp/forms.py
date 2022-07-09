@@ -40,7 +40,8 @@ class RegisterForm(UserCreationForm):
             'first_name',
             'last_name',
             'user_img',
-            'resume'
+            'resume',
+            'card_number'
         )
 
     def clean_username(self):
@@ -61,10 +62,21 @@ class RegisterForm(UserCreationForm):
 
     def clean_resume(self):
         resume = self.cleaned_data['resume']
-        print(resume.content_type)
+        if not resume:
+            return resume
         if resume.content_type != 'application/pdf':
             raise forms.ValidationError("CV must be PDF")
         return resume
+
+    def clean_card_number(self):
+        card_number = self.cleaned_data['card_number']
+        if not card_number:
+            return card_number
+        if not card_number.isnumeric():
+            raise forms.ValidationError('Credit card number consists only of numbers')
+        if len(card_number) != 16:
+            raise forms.ValidationError('Credit card number must be exactly 16 digits')
+        return card_number
 
 
 class MakeCourseForm(forms.ModelForm):
