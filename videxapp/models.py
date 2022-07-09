@@ -10,9 +10,9 @@ class Course(models.Model):
         ('AD', 'Advanced')
     ]
     level = models.CharField(max_length=2, choices=LEVELS, default='IN')
-    cost = models.IntegerField(default=0, verbose_name='Course cost')
+    cost = models.PositiveIntegerField(default=0, verbose_name='Course cost')
     creators = models.TextField(null=True, blank=True, verbose_name='Creators')
-    ex_len = models.IntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
+    ex_len = models.PositiveIntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
     instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
 
     def __str__(self) -> str:
