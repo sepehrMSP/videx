@@ -14,6 +14,7 @@ class Course(models.Model):
     creators = models.TextField(null=True, blank=True, verbose_name='Creators')
     ex_len = models.PositiveIntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
     instructor = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True, verbose_name='Course description')
 
     def __str__(self) -> str:
         return self.name
