@@ -15,9 +15,14 @@
 <div class="row">
 <div class="col-md-9">
     <h1>{{ course.name }}</h1>
-    {% for lec in lectures %}
-        <h2>{{ lec.name }}</h2>
-        <p>{{ lec.text }}</p>
+    {% for session in sessions %}
+        <h2>
+            <a href="./session/{{ session.id }}">{{ session.name }}</a>
+        </h2>
+        <span class="tab">
+            <p>{{ session.text }}</p>
+        </span>
+        <br>
     {% endfor %}
     {% if rule == "instructor" %}
     <a href="./session/add" class="btn btn-primary">Add session</a>

@@ -1,0 +1,64 @@
+{% extends 'bare_base.html' %}
+
+{% block title %}
+    {{ course.name }}
+    {{session.name}}
+{% endblock %}
+
+{% block content %}
+<div class="ui breadcrumb">
+    <a class="section" href="{% url 'home' %}">home</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <a class="section" href="{% url 'courses' %}">courses</a>
+    <i class="fa fa-angle-right" style="margin: 5px;" aria-hidden="true"></i>
+    <div class="active section">{{ course.name }}</div>
+</div>
+<div class="row">
+<div class="col-md-9">
+    <h1>{{ session.name }}</h1>
+    {% if rule == "anonymous" %}
+    <a href="./register" class="btn btn-primary">Register in course</a>
+    {% endif %}
+    {% if rule == "student" %}
+    <a href="./remove" class="btn btn-primary">Drop the course</a>
+    {% endif %}
+    <div class="ui comments" id="comments">
+        {% for comment in comments %}
+            <div class="comment">
+                <div class="content">
+                    <p id="name" class="author">
+                        <strong>{{comment.user.username}}:</strong> {{ comment.user.first_name }} {{ comment.user.last_name }}
+                    </p>
+                    <p class="text" id="text">
+                        {{ comment.text }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+        <br>
+        <h4>Add a new comment</h4>
+        <form id="comment" method="post" class="ui form" id="comment"
+            action="{% url 'add_comment' course.id session.id %}">
+            {% csrf_token %}
+
+            <div class="field">
+                <textarea name="comment" id="comment"></textarea>
+            </div>
+            <button class="ui primary submit labeled icon button" type="submit">
+                <i class="icon edit"></i> Send
+            </button>
+        </form>
+    </div>
+</div>
+<div class="col-md-3">
+    <h3>Instructor</h3>
+    <ul><li>{{ course.instructor }}</li></ul>
+    <h3>Students</h3>
+    <ul>
+        {% for student in students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+</div>
+</div>
+{% endblock %}

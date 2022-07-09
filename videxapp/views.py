@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 
 from videxapp.forms import *
-from videxapp.models import Course, VidexUser
+from videxapp.models import Chatroom, Comment, Course, VidexUser
 
 User = get_user_model()
 
@@ -44,7 +44,6 @@ def register_view(request):
         form = RegisterForm(error_class=RemoveErrorsFromForm)
     return render(request, 'pages/register.html', {'form': form})
 
-
 def logout_view(request):
     logout(request)
     return redirect("/")
@@ -79,14 +78,14 @@ def make_new_session_view(request, course_id):
             name = form.cleaned_data['name']
             text = form.cleaned_data['text']
             instructor = request.user
-            Session(name=name, text=text, course=course).save()
+            session = Session(name=name, text=text, course=course).save()
+            Chatroom(session=session).save()
             return redirect(f"/course/{course_id}/")
     else:
         form = MakeSessionForm()
     return render(request, 'pages/make_new_session.html', {
         'form': form
     })
-
 
 @login_required
 def register_course_view(request, course_id: int):
@@ -99,16 +98,12 @@ def register_course_view(request, course_id: int):
 @login_required
 def course_page_view(request, course_id: int):
     course: Course = Course.objects.get(id=course_id)
-    rule = "anonymous"
-    if request.user.registered_courses.filter(id=course.id).exists():
-        rule = "student"
-    if course.instructor == request.user:
-        rule = "instructor"
-    
+    rule = _get_rule(request, course)
+
     return render(request, 'pages/course_page.html', {
         'rule': rule,
         'course': course,
-        'lectures': None if rule == "anonymous" else Session.objects.filter(course=course),
+        'sessions': None if rule == "anonymous" else Session.objects.filter(course=course),
         'students': VidexUser.objects.filter(registered_courses__id=course.course_id),
     })
 
@@ -130,3 +125,40 @@ def remove_course_view(request, course_id):
     user.registered_courses.remove(course)
     user.save()
     return redirect('courses')
+
+@login_required
+def session_page_view(request, course_id, session_id):
+    course: Course = Course.objects.get(id=course_id)
+    session: Session = Session.objects.get(id=session_id)
+    chatroom = Chatroom.objects.get(session=session)
+    comments = Comment.objects.filter(chatroom=chatroom)
+
+    rule = _get_rule(request, course)
+
+    return render(request, 'pages/session_page.html', {
+        'rule': rule,
+        'course': course,
+        'session': session,
+        'comments': comments,
+        'students': VidexUser.objects.filter(registered_courses__id=course.course_id),
+    })
+
+@login_required
+def add_comment_view(request, course_id, session_id):
+    if request.method == 'POST':
+        text = request.POST.get('comment')
+        course = Course.objects.get(id=course_id)
+        session: Session = Session.objects.get(id=session_id)
+        chatroom = Chatroom.objects.get(session=session)
+        user = request.user
+        Comment(user=user, chatroom=chatroom, text=text).save()
+        return redirect('session_page', course_id=course.id, session_id=session.id)
+
+def _get_rule(request, course: Course):
+    rule = "anonymous"
+    if request.user.registered_courses.filter(id=course.id).exists():
+        rule = "student"
+    if course.instructor == request.user:
+        rule = "instructor"
+
+    return rule
