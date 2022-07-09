@@ -19,6 +19,12 @@
         {{ course.cost }}
         {% endif %}
     </div>
+    {% if course.ex_len %}
+    <div class="ui label" style="margin: 3px;">
+        <i class="calendar alternate icon"></i>
+        {{ course.ex_len }}
+    </div>
+    {% endif %}
 
     <br/>
     <hr/>
