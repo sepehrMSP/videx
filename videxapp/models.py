@@ -5,11 +5,11 @@ from django.contrib.auth.models import AbstractUser
 class Course(models.Model):
     name = models.CharField(max_length=64, verbose_name="course name")
     LEVELS = [
-        ('BA', 'Basic'),
-        ('IN', 'Intermediate'),
-        ('AD', 'Advanced')
+        ('Basic', 'Basic'),
+        ('Intermediate', 'Intermediate'),
+        ('Advanced', 'Advanced')
     ]
-    level = models.CharField(max_length=2, choices=LEVELS, default='IN')
+    level = models.CharField(max_length=12, choices=LEVELS, default='Intermediate')
     cost = models.PositiveIntegerField(default=0, verbose_name='Course cost')
     creators = models.TextField(null=True, blank=True, verbose_name='Creators')
     ex_len = models.PositiveIntegerField(null=True, blank=True, verbose_name='Expected length', help_text='In weeks')
