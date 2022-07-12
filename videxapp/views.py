@@ -131,3 +131,20 @@ def remove_course_view(request, course_id):
     user.registered_courses.remove(course)
     user.save()
     return redirect('courses')
+
+@login_required
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST, request.FILES, instance=request.user, error_class=RemoveErrorsFromForm)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password2']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect("home")
+        else:
+            HttpResponse(form.errors)
+    else:
+        form = RegisterForm(instance=request.user, error_class=RemoveErrorsFromForm)
+    return render(request, 'pages/edit_profile.html', {'form': form})

@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block tabs %}
-    {% include 'includes/tabs.html' with active_tab='register' %}
+    {% include 'includes/tabs.html' with active_tab='edit_profile' %}
 {% endblock %}
 
 {% block title %}
-    Register
+    Edit profile
 {% endblock %}
 
 {% block content %}
     <div id="form">
-        <form id="register_form" class="ui small form" method="post" action="/register" enctype="multipart/form-data">
-            <h1>Register</h1>
+        <form id="edit_profile_form" class="ui small form" method="post" action="/edit_profile" enctype="multipart/form-data">
+            <h1>Edit profile</h1>
 
             <div class="ui breadcrumb">
                 <a class="section" href="{% url 'home' %}">Home</a>
                 <i class="right angle icon divider"></i>
-                <div class="active section">Register</div>
+                <div class="active section">Edit profile</div>
             </div>
 
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="ui fluid large teal submit button" name="submit">Register</button>
+            <button type="submit" class="ui fluid large teal submit button" name="submit">Edit</button>
 
             <div class="ui error message"></div>
         </form>

@@ -9,6 +9,11 @@
         class="ui item{% if active_tab == 'profile' %} active{% endif %}">
         Profile
     </a>
+    <a  href="{% url 'edit_profile' %}"
+        id="edit"
+        class="ui item{% if active_tab == 'edit_profile' %} active{% endif %}">
+        Edit profile
+    </a>
 {% endif %}
 
 <a href="{% url 'courses' %}" id="courses" style="margin-top: 5px;"

@@ -61,6 +61,12 @@ class RegisterForm(UserCreationForm):
         if password != confirm_password:
             raise forms.ValidationError("گذرواژه و تکرار گذرواژه یکسان نیستند")
 
+    def clean_user_img(self):
+        user_img = self.cleaned_data['user_img']
+        if not user_img:
+            user_img = 'blank-profile.png'
+        return user_img
+
     def clean_resume(self):
         resume = self.cleaned_data['resume']
         if not resume:
