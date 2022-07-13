@@ -114,6 +114,7 @@ def make_new_exam_view(request, course_id):
         'form': form
     })
 
+
 @login_required
 def register_course_view(request, course_id: int):
     course = Course.objects.get(id=course_id)
@@ -121,6 +122,7 @@ def register_course_view(request, course_id: int):
     user.registered_courses.add(course)
     user.save()
     return redirect(f'/course/{course.id}/')
+
 
 @login_required
 def course_page_view(request, course_id: int):
@@ -139,6 +141,7 @@ def course_page_view(request, course_id: int):
         'students': VidexUser.objects.filter(registered_courses__id=course.course_id),
     })
 
+
 def get_rule(request, exam):
     rule = "anonymous"
     if request.user.registered_courses.filter(id=exam.course.id).exists():
@@ -148,12 +151,33 @@ def get_rule(request, exam):
 
     return rule
 
+
 @login_required
 def exam_page_view(request, course_id: int, exam_id: int):
+    def answer_of_question(q, user):
+        qs = Answer.objects.filter(question=q, user=user)
+        if not qs.first() is None:
+            return qs.first().value
+        else:
+            return None
     exam: Exam = Exam.objects.get(id=exam_id)
-    written_questions = WrittenQuestion.objects.filter(exam=exam)
-    multiple_choice_questions = MultipleChoiceQuestion.objects.filter(exam=exam)
-    single_answer_questions = SingleAnswerQuestion.objects.filter(exam=exam)
+    written_questions = [{
+        "type": "written",
+        "text": x.question_text,
+        "answer": answer_of_question(x, request.user),
+    } for x in WrittenQuestion.objects.filter(exam=exam)]
+    multiple_choice_questions = [{
+        "type": "multi_choice",
+        "text": x.question_text,
+        "choices": [x.choice1, x.choice2, x.choice3, x.choice4],
+        "answer": answer_of_question(x, request.user),
+    } for x in MultipleChoiceQuestion.objects.filter(exam=exam)]
+    single_answer_questions = [{
+        "type": "single_answer",
+        "text": x.question_text,
+        "answer": answer_of_question(x, request.user),
+    } for x in SingleAnswerQuestion.objects.filter(exam=exam)]
+    questions = [*written_questions, *multiple_choice_questions, *single_answer_questions]
     if exam.course.id != course_id:
         raise PermissionDenied()
     rule = get_rule(request, exam)
@@ -166,11 +190,10 @@ def exam_page_view(request, course_id: int, exam_id: int):
     return render(request, 'pages/exam_page.html', {
         'rule': rule,
         'exam': exam,
-        'written_questions': written_questions,
-        'multiple_choice_questions': multiple_choice_questions,
-        'single_answer_questions': single_answer_questions,
+        'questions': questions,
         "time_state": time_state,
     })
+
 
 @login_required
 def courses_search_view(request):
@@ -183,6 +206,7 @@ def courses_search_view(request):
         'registered_courses': registered_courses,
     })
 
+
 @login_required
 def remove_course_view(request, course_id):
     course = Course.objects.get(id=course_id)
@@ -190,6 +214,7 @@ def remove_course_view(request, course_id):
     user.registered_courses.remove(course)
     user.save()
     return redirect('courses')
+
 
 @login_required
 def add_multiple_choice_question_view(request, course_id, exam_id):
@@ -200,7 +225,8 @@ def add_multiple_choice_question_view(request, course_id, exam_id):
         raise PermissionDenied()
 
     if request.method == 'POST':
-        multiple_choice_question_form = MakeMultipleChoiceQuestionForm(request.POST)
+        multiple_choice_question_form = MakeMultipleChoiceQuestionForm(
+            request.POST)
         if multiple_choice_question_form.is_valid():
             question_text = multiple_choice_question_form.cleaned_data['question_text']
             choice1 = multiple_choice_question_form.cleaned_data['choice1']
@@ -208,9 +234,10 @@ def add_multiple_choice_question_view(request, course_id, exam_id):
             choice3 = multiple_choice_question_form.cleaned_data['choice3']
             choice4 = multiple_choice_question_form.cleaned_data['choice4']
 
-            answer_id = multiple_choice_question_form.cleaned_data['answer_id']
+            answer_id = multiple_choice_question_form.cleaned_data['correct_answer_id']
 
-        MultipleChoiceQuestion(exam=exam, question_text=question_text, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, answer_id=answer_id).save()
+        MultipleChoiceQuestion(exam=exam, question_text=question_text, choice1=choice1,
+                               choice2=choice2, choice3=choice3, choice4=choice4, correct_answer_id=answer_id).save()
         return redirect('exam_page', course_id=course_id, exam_id=exam_id)
 
     elif request.method == 'GET':
@@ -219,6 +246,7 @@ def add_multiple_choice_question_view(request, course_id, exam_id):
         return render(request, 'pages/make_new_multiple_answer_question.html', {
             'multiple_choice_question_form': multiple_choice_question_form,
         })
+
 
 @login_required
 def add_single_answer_question_view(request, course_id, exam_id):
@@ -234,7 +262,8 @@ def add_single_answer_question_view(request, course_id, exam_id):
             question_text = single_answer_form.cleaned_data['question_text']
             answer = single_answer_form.cleaned_data['answer']
 
-        SingleAnswerQuestion(exam=exam, question_text=question_text, answer=answer).save()
+        SingleAnswerQuestion(
+            exam=exam, question_text=question_text, answer=answer).save()
         return redirect('exam_page', course_id=course_id, exam_id=exam_id)
 
     elif request.method == 'GET':
@@ -243,6 +272,7 @@ def add_single_answer_question_view(request, course_id, exam_id):
         return render(request, 'pages/make_new_single_answer_question.html', {
             'single_answer_question_form': single_answer_form,
         })
+
 
 @login_required
 def add_written_question_view(request, course_id, exam_id):
@@ -257,7 +287,6 @@ def add_written_question_view(request, course_id, exam_id):
         if written_question_form.is_valid():
             question_text = written_question_form.cleaned_data['question_text']
 
-
         WrittenQuestion(exam=exam, question_text=question_text).save()
         return redirect('exam_page', course_id=course_id, exam_id=exam_id)
 
@@ -267,6 +296,7 @@ def add_written_question_view(request, course_id, exam_id):
         return render(request, 'pages/make_new_written_question.html', {
             'written_question_form': written_question_form,
         })
+
 
 @login_required
 def choose_question_type_view(request, course_id, exam_id):

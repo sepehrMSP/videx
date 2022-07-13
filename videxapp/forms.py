@@ -109,7 +109,7 @@ class MakeMultipleChoiceQuestionForm(forms.ModelForm):
         ("4", "forth choice"),
     )
 
-    answer_id = forms.ChoiceField(choices=CHOICES)
+    correct_answer_id = forms.ChoiceField(choices=CHOICES)
     class Meta:
         model = MultipleChoiceQuestion
         fields = (
@@ -144,5 +144,5 @@ class MakeSingleAnswerQuestionForm(forms.ModelForm):
         model = SingleAnswerQuestion
         fields = (
             'question_text',
-            'answer',
+            'correct_answer',
         )

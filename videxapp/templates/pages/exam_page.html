@@ -19,26 +19,42 @@
     <h1>{{ exam.name }}</h1>
     <h2>Questions</h2>
     {% if rule == "instructor" %}
-    <h4>written questions</h4>
-    {% for question in written_questions %}
-        {{question.question_text}} <br>
+    <ol>
+    {% for question in questions %}
+        <li>
+            {{ question.text }}
+            {% if question.type == "multi_choice" %}
+            <br>
+            <ul>
+                {% for choice in question.choices %}
+                    <li>{{ choice }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
     {% endfor %}
-
-    <h4>single answer questions</h4>
-    {% for question in single_answer_questions %}
-        {{question.question_text}} <br>
-    {% endfor %}
-
-    <h4>multiple choices questions</h4>
-    {% for question in multiple_choice_questions %}
-        {{question.question_text}} <br>
-        1. {{question.choice1}} <br>
-        2. {{question.choice2}} <br>
-        3. {{question.choice3}} <br>
-        4. {{question.choice4}} <br>
-        <br><br>
-    {% endfor %}
+    </ol>
     <a href="./{{exam.id}}/question/add " class="btn btn-primary">Add question</a>
+    {% elif time_state == "before_release" %}
+    <p>You don't have access before start</p>
+    {% elif time_state == "before_deadline" %}
+
+    {% else %}
+    {% for question in questions %}
+        <li>
+            {{ question.text }}
+            <br>
+            {% if question.type == "multi_choice" %}
+            <ul>
+                {% for choice in question.choices %}
+                    <li>{{ choice }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <textarea disabled="true" style="width: 100%;">{{ question.answer }}</textarea>
+            {% endif %}
+        </li>
+    {% endfor %}
     {% endif %}
 
 </div>

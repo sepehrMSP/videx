@@ -29,7 +29,7 @@ class Exam(models.Model):
     release_date = models.DateTimeField()
     deadline_date = models.DateTimeField()
     min_grade = models.IntegerField()
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
@@ -45,8 +45,10 @@ class Question(models.Model):
     question_text = models.TextField()
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 
-    class Meta:
-        abstract = True
+class Answer(models.Model):
+    value = models.TextField()
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey('VidexUser', on_delete=models.CASCADE)
 
 class MultipleChoiceQuestion(Question):
     choice1 = models.TextField()
@@ -59,10 +61,10 @@ class MultipleChoiceQuestion(Question):
         (3, 'three'),
         (4, 'four'),
     )
-    answer_id = models.IntegerField(choices=CHOICES, default=1)
+    correct_answer_id = models.IntegerField(choices=CHOICES, default=1)
 
 class WrittenQuestion(Question):
     pass
 
 class SingleAnswerQuestion(Question):
-    answer = models.CharField(max_length=100)
+    correct_answer = models.CharField(max_length=100)
