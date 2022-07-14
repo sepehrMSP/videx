@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+import json
 
 from videxapp.forms import *
 from videxapp.models import *
@@ -94,6 +95,32 @@ def make_new_session_view(request, course_id):
 
 
 @login_required
+def edit_exam_view(request, course_id, exam_id):
+    course: Course = Course.objects.get(id=course_id)
+    if request.user != course.instructor:
+        raise PermissionDenied()
+    exam: Exam = Exam.objects.get(id=exam_id, course=course)
+    if request.method == 'POST':
+        form = MakeExamForm(request.POST)
+        if form.is_valid():
+            exam.name = form.cleaned_data['name']
+            exam.release_date = form.cleaned_data['release_date']
+            exam.deadline_date = form.cleaned_data['deadline_date']
+            exam.min_grade = form.cleaned_data['min_grade']
+            exam.save()
+            return redirect(f"/course/{course_id}/")
+    else:
+        form = MakeExamForm({
+            'name': exam.name,
+            'release_date': exam.release_date,
+            'deadline_date': exam.deadline_date,
+            'min_grade': exam.min_grade,
+        })
+    return render(request, 'pages/make_new_exam.html', {
+        'form': form
+    })
+
+@login_required
 def make_new_exam_view(request, course_id):
     course: Course = Course.objects.get(id=course_id)
     if request.user != course.instructor:
@@ -153,6 +180,16 @@ def get_rule(request, exam):
 
 
 @login_required
+def exam_submit_view(request, course_id: int, exam_id: int):
+    exam: Exam = Exam.objects.get(id=exam_id)
+    data = json.loads(request.body.decode("utf-8"))
+    for i in data:
+        q = Question.objects.get(id=i)
+        Answer.objects.filter(question=q, user=request.user).delete()
+        Answer.objects.create(question=q, value=data[i], user=request.user)
+    return HttpResponse("OK")
+
+@login_required
 def exam_page_view(request, course_id: int, exam_id: int):
     def answer_of_question(q, user):
         qs = Answer.objects.filter(question=q, user=user)
@@ -162,17 +199,20 @@ def exam_page_view(request, course_id: int, exam_id: int):
             return None
     exam: Exam = Exam.objects.get(id=exam_id)
     written_questions = [{
+        "id": x.id,
         "type": "written",
         "text": x.question_text,
         "answer": answer_of_question(x, request.user),
     } for x in WrittenQuestion.objects.filter(exam=exam)]
     multiple_choice_questions = [{
+        "id": x.id,
         "type": "multi_choice",
         "text": x.question_text,
         "choices": [x.choice1, x.choice2, x.choice3, x.choice4],
         "answer": answer_of_question(x, request.user),
     } for x in MultipleChoiceQuestion.objects.filter(exam=exam)]
     single_answer_questions = [{
+        "id": x.id,
         "type": "single_answer",
         "text": x.question_text,
         "answer": answer_of_question(x, request.user),
@@ -260,10 +300,10 @@ def add_single_answer_question_view(request, course_id, exam_id):
         single_answer_form = MakeSingleAnswerQuestionForm(request.POST)
         if single_answer_form.is_valid():
             question_text = single_answer_form.cleaned_data['question_text']
-            answer = single_answer_form.cleaned_data['answer']
+            answer = single_answer_form.cleaned_data['correct_answer']
 
         SingleAnswerQuestion(
-            exam=exam, question_text=question_text, answer=answer).save()
+            exam=exam, question_text=question_text, correct_answer=answer).save()
         return redirect('exam_page', course_id=course_id, exam_id=exam_id)
 
     elif request.method == 'GET':

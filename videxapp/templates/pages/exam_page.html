@@ -38,7 +38,66 @@
     {% elif time_state == "before_release" %}
     <p>You don't have access before start</p>
     {% elif time_state == "before_deadline" %}
-
+    {% for question in questions %}
+        <li>
+            {{ question.text }}
+            <br>
+            {% if question.type == "multi_choice" %}
+            <ul>
+                {% for choice in question.choices %}
+                    <li>
+                        <input type="radio"
+                            id="ans{{ question.id }}_{{ forloop.counter }}"
+                            name="ans{{ question.id }}" value="{{ forloop.counter }}">
+                        {{ choice }}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <textarea id="ans{{ question.id }}" style="width: 100%;">{{ question.answer }}</textarea>
+            {% endif %}
+        </li>
+    {% endfor %}
+    <button id="submit" class="btn btn-primary">Submit answers</button>
+    {% csrf_token %}
+    <script>
+        const setAnswer = (id, ty, answer) => {
+            if (ty === 'multi_choice') {
+                document.getElementById(`ans${id}_${answer}`).checked = true;
+            }
+        };
+        // {% for question in questions %}
+        setAnswer("{{ question.id }}", "{{ question.type }}", "{{ question.answer }}"),
+        // {% endfor %}
+        document.getElementById('submit').onclick = submitAnswers = async () => {
+            const calcAnswer = (id, ty) => {
+                if (ty === 'multi_choice') {
+                    for (let i = 1; i < 5; i += 1) {
+                        if (document.getElementById(`ans${id}_${i}`).checked) {
+                            return `${i}`;
+                        }
+                    }
+                    return "";
+                } else {
+                    return document.getElementById(`ans${id}`).value;
+                }
+            };
+            const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            const result = JSON.stringify({
+                // {% for question in questions %}
+                    "{{ question.id }}": calcAnswer("{{ question.id }}", "{{ question.type }}"),
+                // {% endfor %}
+            });
+            await fetch("./{{ exam.id }}/submit", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrf_token,
+                },
+                body: result,
+            });
+        };
+    </script>
     {% else %}
     {% for question in questions %}
         <li>
@@ -68,6 +127,9 @@
     {% else %}
     <h3>Time is over</h3>
     <p>Time past from deadline: {{ exam.deadline_date|timesince }}</p>
+    {% endif %}
+    {% if rule == "instructor" %}
+    <a href="./{{exam.id}}/edit" class="btn btn-primary">Edit</a>
     {% endif %}
 </div>
 </div>
