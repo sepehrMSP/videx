@@ -37,6 +37,16 @@ class Session(models.Model):
         return self.name
 
 
+class Video(models.Model):
+    name = models.CharField(max_length=64, verbose_name="video name")
+    text = models.TextField(verbose_name="video description")
+    content = models.FileField(upload_to='videos/')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class VidexUser(AbstractUser):
     national_id = models.IntegerField(null=True, blank=True, verbose_name="ID Number")
     telephone_number = models.CharField(null=True, max_length=11, verbose_name='cellphone number')

@@ -35,9 +35,20 @@
     {% for lec in lectures %}
         <h2>{{ lec.name }}</h2>
         <p>{{ lec.text | markdown | safe }}</p>
+        <hr/>
+    {% endfor %}
+    {% for vid in videos %}
+        <h2>{{ vid.name }}</h2>
+        <p>{{ vid.text | markdown | safe }}</p>
+        <a href="{{ vid.content.url }}">
+            <i class="fa fa-cloud-download" aria-hidden="true"></i>
+            Download video
+        </a>
+        <hr/>
     {% endfor %}
     {% if rule == "instructor" %}
     <a href="./session/add" class="btn btn-primary">Add session</a>
+    <a href="./video/add" class="btn btn-primary">Add video</a>
     {% endif %}
     {% if rule == "anonymous" %}
     <a href="./register" class="btn btn-primary">Register in course</a>

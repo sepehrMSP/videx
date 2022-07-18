@@ -4,7 +4,7 @@ from django.forms.utils import ErrorList
 from django.contrib.auth.forms import UserCreationForm
 
 
-from videxapp.models import Course, VidexUser, Session
+from videxapp.models import Course, VidexUser, Session, Video
 
 User = get_user_model()
 
@@ -112,3 +112,25 @@ class MakeSessionForm(forms.ModelForm):
             'name',
             'text',
         )
+
+
+class MakeVideoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MakeVideoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Video
+        fields = (
+            'name',
+            'text',
+            'content',
+        )
+
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        if not content:
+            raise forms.ValidationError('You must upload a video!')
+        if content.content_type != 'video/mp4':
+            raise forms.ValidationError("Your video file must be mp4")
+        return content
+

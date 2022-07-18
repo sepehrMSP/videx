@@ -90,6 +90,28 @@ def make_new_session_view(request, course_id):
 
 
 @login_required
+def make_new_video_view(request, course_id):
+    course: Course = Course.objects.get(id=course_id)
+    if request.user != course.instructor:
+        raise PermissionDenied()
+    if request.method == 'POST':
+        form = MakeVideoForm(request.POST, request.FILES, error_class=RemoveErrorsFromForm)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            text = form.cleaned_data['text']
+            content = form.cleaned_data['content']
+            Video(name=name, text=text, content=content, course=course).save()
+            return redirect(f"/course/{course_id}/")
+        else:
+            HttpResponse(form.errors)
+    else:
+        form = MakeVideoForm(error_class=RemoveErrorsFromForm)
+    return render(request, 'pages/make_new_video.html', {
+        'form': form
+    })
+
+
+@login_required
 def register_course_view(request, course_id: int):
     course = Course.objects.get(id=course_id)
     user: VidexUser = request.user
@@ -110,6 +132,7 @@ def course_page_view(request, course_id: int):
         'rule': rule,
         'course': course,
         'lectures': None if rule == "anonymous" else Session.objects.filter(course=course),
+        'videos': None if rule == "anonymous" else Video.objects.filter(course=course),
         'students': VidexUser.objects.filter(registered_courses__id=course.course_id),
     })
 
