@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    ایجاد واحد
+{% endblock %}
+
+{% block content %}
+    <div id="form">
+        <form id="make_course" class="ui small form" method="post" enctype="multipart/form-data">
+            <h1>Create a lecture</h1>
+            <div class="ui breadcrumb">
+                <a class="section" href="{% url 'home' %}">Home</a>
+                <i class="right angle icon divider"></i>
+                <div class="active section">Create a lecture</div>
+            </div>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="ui fluid large teal submit button">Create</button>
+            <div class="ui error message"></div>
+        </form>
+    </div>
+    <div id="error">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Error
+                </div>
+                <p>{{ error|escape }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
