@@ -1,5 +1,7 @@
 {% extends 'bare_base.html' %}
 
+{% load videxapp_extras %}
+
 {% block title %}
     {{ course.name }}
 {% endblock %}
@@ -32,7 +34,7 @@
     {% endif %}
     {% for lec in lectures %}
         <h2>{{ lec.name }}</h2>
-        <p>{{ lec.text }}</p>
+        <p>{{ lec.text | markdown | safe }}</p>
     {% endfor %}
     {% if rule == "instructor" %}
     <a href="./session/add" class="btn btn-primary">Add session</a>
